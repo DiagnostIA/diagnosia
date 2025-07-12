@@ -1,51 +1,62 @@
 
 import streamlit as st
 import openai
-import os
 
-st.set_page_config(page_title="DiagnosIA", page_icon="🧠")
+st.set_page_config(page_title="🧠 DiagnosIA — Assistant IA Médical", layout="wide")
 
-st.title("🧠 DiagnosIA — Assistant IA Médical")
-
-mode = st.sidebar.selectbox("Choisir un mode", ["Cours", "Cas clinique", "QCM"])
-
+# Chargement des secrets
 openai.api_key = st.secrets["OPENAI_API_KEY"]
 
-if mode == "Cours":
-    sujet = st.text_area("Entre un sujet de cours (ex : embolie pulmonaire)", height=150)
-    if st.button("Résumer"):
-        with st.spinner("Génération du résumé..."):
-            response = openai.ChatCompletion.create(
-                model="gpt-4",
-                messages=[
-                    {"role": "system", "content": "Tu es un professeur de médecine. Résume le sujet pour un étudiant de façon claire et pédagogique."},
-                    {"role": "user", "content": sujet}
-                ]
-            )
-            st.markdown(response["choices"][0]["message"]["content"])
+# Styles personnalisés pour améliorer l'esthétique
+st.markdown("""
+    <style>
+        .main {
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-radius: 12px;
+        }
+        .stSelectbox > div {
+            font-weight: bold;
+            font-size: 18px;
+        }
+        .stTextArea textarea {
+            font-size: 16px;
+        }
+        .css-1aumxhk {
+            font-size: 18px !important;
+        }
+        .css-1d391kg {
+            font-size: 20px;
+            color: #2c3e50;
+            font-weight: bold;
+        }
+    </style>
+""", unsafe_allow_html=True)
 
-elif mode == "Cas clinique":
-    cas = st.text_area("Décris un cas clinique ou une suspicion (ex : homme 65 ans, douleur thoracique...)")
-    if st.button("Analyser"):
-        with st.spinner("Analyse du cas..."):
-            response = openai.ChatCompletion.create(
-                model="gpt-4",
-                messages=[
-                    {"role": "system", "content": "Tu es un médecin expert. Analyse le cas clinique en suivant une démarche diagnostique claire avec arbre décisionnel si utile."},
-                    {"role": "user", "content": cas}
-                ]
-            )
-            st.markdown(response["choices"][0]["message"]["content"])
+st.title("🧠 DiagnosIA — Assistant IA Médical")
+st.subheader("Une IA conçue pour aider les étudiants en médecine à apprendre plus efficacement.")
 
-else:
-    question = st.text_area("Entre une question ou un QCM", height=150)
-    if st.button("Analyser / Vérifier"):
-        with st.spinner("Analyse..."):
-            response = openai.ChatCompletion.create(
-                model="gpt-4",
-                messages=[
-                    {"role": "system", "content": "Tu es un expert en pédagogie médicale. Aide à comprendre ou corriger ce QCM pour un étudiant."},
-                    {"role": "user", "content": question}
-                ]
-            )
-            st.markdown(response["choices"][0]["message"]["content"])
+mode = st.selectbox("🎯 Choisir un mode", ["Cours", "Cas clinique", "QCM"])
+
+prompt = st.text_area("✍️ Entrez votre demande ici :", height=200, placeholder="Exemples :
+- Résume le cours sur le diabète
+- Simule un cas clinique avec diagnostic différentiel
+- Crée 5 QCM sur l’hypertension avec explications")
+
+if st.button("Lancer l’analyse 🧬"):
+    if prompt:
+        with st.spinner("⏳ Génération en cours..."):
+            try:
+                response = openai.chat.completions.create(
+                    model="gpt-4",
+                    messages=[
+                        {"role": "system", "content": f"Tu es un assistant intelligent spécialisé en médecine. Mode sélectionné : {mode}."},
+                        {"role": "user", "content": prompt},
+                    ]
+                )
+                st.markdown("### 📋 Résultat généré")
+                st.write(response.choices[0].message.content)
+            except Exception as e:
+                st.error(f"Erreur lors de l’appel à l’API : {str(e)}")
+    else:
+        st.warning("Veuillez entrer une question ou un texte à analyser.")
