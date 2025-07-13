@@ -1,85 +1,84 @@
-import streamlit as st
+import openai
 
-# --------------------- CONFIG GÉNÉRALE ---------------------
-st.set_page_config(page_title="DiagnosIA", layout="centered")
+# 👉 Remplace ici par ta propre clé API OpenAI
+openai.api_key = "sk-..."  # mets ta clé ici ou utilise st.secrets si tu déploies
 
-st.title("📚 DiagnosIA – Assistant IA pour étudiants en médecine")
-st.markdown("Une app intelligente pour apprendre, réviser et simuler des cas cliniques.")
-
-# --------------------- MENU PRINCIPAL ---------------------
-menu = st.sidebar.selectbox("🔍 Choisis un module", ["🏫 Cours", "🧪 Cas Cliniques", "ℹ️ À propos"])
-
-# --------------------- MODULE COURS ---------------------
 if menu == "🏫 Cours":
     st.header("📘 Module Cours")
-    chapitre = st.selectbox("Choisis un chapitre :", [
-        "Néoplasies intra-épithéliales cervicales (CIN)",
-        "Sémiologie en urologie",
-        "Cancers du sein",
-        "Troubles hydro-électrolytiques"
-    ])
 
-    st.subheader(f"Chapitre sélectionné : {chapitre}")
-    st.markdown("🔍 *Contenu pédagogique simplifié*")
+    tab1, tab2 = st.tabs(["📚 Choisir un cours", "🧠 Générer une fiche IA"])
 
-    if chapitre == "Néoplasies intra-épithéliales cervicales (CIN)":
-        st.markdown("""
-        ### 🔬 Définition :
-        - **CIN** = anomalies des cellules épithéliales du col utérin (pré-cancer).
-        - Grades : **CIN I (léger)**, **CIN II (modéré)**, **CIN III (sévère)**.
+    with tab1:
+        chapitre = st.selectbox("Choisis un chapitre :", [
+            "Néoplasies intra-épithéliales cervicales (CIN)",
+            "Sémiologie en urologie",
+            "Cancers du sein",
+            "Troubles hydro-électrolytiques"
+        ])
+        st.subheader(f"📖 Contenu du cours : {chapitre}")
 
-        ### 📈 Évolution :
-        - Spontanément régressif en 60% des cas pour CIN I.
-        - Risque de progression vers carcinome si non traité.
+        if chapitre == "Néoplasies intra-épithéliales cervicales (CIN)":
+            st.markdown("""
+            ### 🧬 Définition :
+            - CIN = anomalies des cellules épithéliales du col utérin (pré-cancer).
+            - Grades : CIN I (léger), CIN II (modéré), CIN III (sévère).
 
-        ### 🧪 Dépistage :
-        - Frottis cervico-utérin.
-        - Typage HPV si anomalies.
+            ### 🧠 Étiologies :
+            - Infections persistantes à HPV à haut risque (surtout 16 et 18)
+            - Rapports sexuels précoces ou multiples
+            - Tabagisme
+            - Immunodépression (ex : VIH)
 
-        ### 💡 À retenir pour les QCM :
-        - CIN ≠ cancer invasif.
-        - CIN III = risque ++ de progression.
-        - Traitement = exérèse locale si persistance.
-        """)
-    
-    else:
-        st.info("Le contenu de ce chapitre n’a pas encore été ajouté.")
+            ### 🩺 Clinique :
+            - Souvent asymptomatique
+            - Parfois : métrorragies post-coïtales
 
-# --------------------- MODULE CAS CLINIQUES ---------------------
-elif menu == "🧪 Cas Cliniques":
-    st.header("🧪 Module Cas Cliniques")
+            ### 🧪 Biologie :
+            - Frottis cervico-utérin : ASC-US, ASC-H
+            - Typage HPV
 
-    st.markdown("#### 🔍 Cas clinique n°1 : Femme de 35 ans, métrorragies post-coïtales")
-    st.write("Question 1 : Que fais-tu en premier ?")
+            ### 🖼️ Imagerie :
+            - Colposcopie ciblée
+            - Pas de score spécifique mais cartographie des lésions
 
-    choix1 = st.radio("👉 Choix 1 :", ["Observation", "Frottis cervico-utérin", "Échographie pelvienne", "Colposcopie"])
-    if choix1 == "Frottis cervico-utérin":
-        st.success("✅ Bonne réponse. Tu passes à l'étape suivante.")
-        st.write("Question 2 : Le frottis revient ASC-H. Tu fais quoi ?")
+            ### 🧪 Étude de cas :
+            Femme de 32 ans, antécédents de rapports précoces, frottis ASC-H → colposcopie positive.
+            """)
 
-        choix2 = st.radio("👉 Choix 2 :", ["On refait un frottis", "Colposcopie", "Biopsie endométriale", "IRM pelvienne"])
-        if choix2 == "Colposcopie":
-            st.success("✅ Bien joué. Tu progresses dans la démarche logique.")
         else:
-            st.error("❌ Ce n’est pas l’étape recommandée en 1ère intention.")
-    else:
-        st.error("❌ Ce n’est pas l’examen recommandé en première intention dans ce contexte.")
+            st.info("📄 Ce chapitre n’est pas encore disponible.")
 
-# --------------------- MODULE À PROPOS ---------------------
-elif menu == "ℹ️ À propos":
-    st.header("ℹ️ À propos de DiagnosIA")
-    st.markdown("""
-    DiagnosIA est un assistant IA médical conçu par un étudiant pour des étudiants.
-    
-    Objectifs :
-    - T’aider à **comprendre** les cours et pas juste les mémoriser.
-    - T’entraîner sur des **cas cliniques interactifs** comme en ECOS.
-    - Te faire gagner du temps avec une IA **adaptée à la médecine**.
+    with tab2:
+        st.markdown("### 💡 Génère une fiche médicale intelligente à partir d'une pathologie")
+        pathologie = st.text_input("Entrez le nom de la pathologie :")
 
-    🧠 Développé en Streamlit + Python  
-    📍 Projet en cours — version bêta 0.1
-    """)
+        if pathologie:
+            with st.spinner("📡 Génération de la fiche en cours..."):
+                prompt = f"""
+Tu es un expert en pédagogie médicale. Rédige une fiche claire et mémorable sur la pathologie suivante : {pathologie}.
 
-# --------------------- FOOTER ---------------------
-st.markdown("---")
-st.caption("© 2025 DiagnosIA – Prototype by Anapath ✨")
+Structure obligatoire :
+1. 🧬 Définition (claire et pédagogique)
+2. 🧠 Étiologies principales (listées de manière logique et intuitive)
+3. 🩺 Clinique typique (signes à retenir absolument)
+4. 🧪 Biologie (examens complémentaires, anomalies classiques)
+5. 🖼️ Imagerie (comment apparaît la pathologie, scores ou signes utiles s’il y en a)
+6. 🧪 Étude de cas rapide pour ancrer l’apprentissage
+
+Le ton doit être simple, structuré, fluide et orienté mémorisation pour un étudiant en médecine.
+                """
+
+                try:
+                    response = openai.ChatCompletion.create(
+                        model="gpt-3.5-turbo",
+                        messages=[
+                            {"role": "user", "content": prompt}
+                        ],
+                        temperature=0.7,
+                        max_tokens=1000
+                    )
+                    fiche = response["choices"][0]["message"]["content"]
+                    st.markdown("---")
+                    st.markdown(fiche)
+                except Exception as e:
+                    st.error(f"❌ Une erreur est survenue : {e}")
