@@ -1,8 +1,9 @@
 import streamlit as st
 import openai
+import os
 
-# ⛑️ Clé API OpenAI (attention à ne jamais l’exposer en public !)
 openai.api_key = os.getenv("OPENAI_API_KEY")
+
 
 # 🧠 Fonction de génération de fiche médicale
 def generate_medical_sheet(pathologie):
