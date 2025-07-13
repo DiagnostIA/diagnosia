@@ -1,16 +1,16 @@
 import streamlit as st
-import openai
+from openai import OpenAI
 
-# 🔐 Remplace ceci par ta clé API personnelle
-openai.api_key = "sk-..."  # ← Mets ta clé ici
+# 🔐 Mets ici ta clé OpenAI
+client = OpenAI(api_key="sk-...")  # ← à remplacer par ta clé
 
-# ------------------- CONFIGURATION -------------------
+# ------------------- CONFIG -------------------
 st.set_page_config(page_title="DiagnosIA", layout="centered")
 st.title("📚 DiagnosIA – Assistant IA pour étudiants en médecine")
 st.markdown("Une app intelligente pour apprendre, réviser et simuler des cas cliniques.")
 menu = st.sidebar.selectbox("🔍 Choisis un module", ["🏫 Cours", "🧪 Cas Cliniques", "ℹ️ À propos"])
 
-# ------------------- MODULE COURS -------------------
+# ------------------- COURS -------------------
 if menu == "🏫 Cours":
     st.header("📘 Module Cours")
 
@@ -76,7 +76,7 @@ Le ton doit être structuré, fluide, pédagogique et adapté à un étudiant en
                 """
 
                 try:
-                    response = openai.ChatCompletion.create(
+                    response = client.chat.completions.create(
                         model="gpt-3.5-turbo",
                         messages=[
                             {"role": "user", "content": prompt}
@@ -84,13 +84,13 @@ Le ton doit être structuré, fluide, pédagogique et adapté à un étudiant en
                         temperature=0.7,
                         max_tokens=1000
                     )
-                    fiche = response["choices"][0]["message"]["content"]
+                    fiche = response.choices[0].message.content
                     st.markdown("---")
                     st.markdown(fiche)
                 except Exception as e:
                     st.error(f"❌ Une erreur est survenue : {e}")
 
-# ------------------- MODULE CAS CLINIQUES -------------------
+# ------------------- CAS CLINIQUES -------------------
 elif menu == "🧪 Cas Cliniques":
     st.header("🧪 Module Cas Cliniques")
 
@@ -111,7 +111,7 @@ elif menu == "🧪 Cas Cliniques":
     else:
         st.error("❌ Ce n’est pas l’examen recommandé en première intention.")
 
-# ------------------- MODULE À PROPOS -------------------
+# ------------------- À PROPOS -------------------
 elif menu == "ℹ️ À propos":
     st.header("ℹ️ À propos de DiagnosIA")
     st.markdown("""
