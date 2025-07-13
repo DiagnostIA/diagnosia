@@ -1,48 +1,85 @@
 import streamlit as st
-from openai import OpenAI
-import os
+import openai
 
-# Remplace ici par ta vraie clé API OpenAI
-client = OpenAI(
-    api_key="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",  # <--- Mets ta vraie clé ici
-    organization="org-opwXQ0sAJdLmwoS4wkbgjP3U"
-)
-
-def generate_medical_sheet(pathologie):
-    prompt = f"""
-    Génère une fiche médicale claire et intuitive sur : {pathologie.upper()}.
-
-    Structure de la fiche :
-    🧬 Définition
-    🧠 Étiologies (logiques, pas robotisées)
-    🩺 Clinique typique
-    🧪 Biologie
-    🖼️ Imagerie (avec scores spécifiques s’il y en a)
-    📚 Étude de cas (facultatif mais utile si pertinent)
-
-    Sois pédagogique, lisible, avec des phrases naturelles pour un étudiant en médecine.
-    """
-
-    response = client.chat.completions.create(
-        model="gpt-4",
-        messages=[{"role": "user", "content": prompt}],
-        temperature=0.7
-    )
-    return response.choices[0].message.content
-
-# Interface Streamlit
+# — CONFIGURATION GÉNÉRALE —
 st.set_page_config(page_title="DiagnosIA", layout="centered")
 st.title("📚 DiagnosIA – Assistant IA pour étudiants en médecine")
+st.markdown("Une app intelligente pour apprendre, réviser et simuler des cas cliniques.")
 
-menu = st.sidebar.selectbox("🔎 Choisis un module", ["📘 Cours", "🧠 Générer une fiche IA"])
+# — CLÉ API OPENAI (VALIDE) —
+openai.api_key = "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"
+openai.organization = "org-opwXQ0sAJdLmwoS4wkbgjP3U"
 
-if menu == "🧠 Générer une fiche IA":
-    st.header("💡 Génère une fiche médicale intelligente à partir d'une pathologie")
+# — MENU LATÉRAL —
+menu = st.sidebar.selectbox("🔎 Choisis un module", [
+    "📚 Module Cours",
+    "🧾 Générer une fiche IA",
+    "🧠 QCM intelligents",
+    "💡 Méthodo personnalisée",
+    "❌ Analyse erreurs",
+    "🖨️ Générer fiche PDF",
+    "🎯 Mode ECN / Concours",
+    "👨‍⚕️ Mode Jeune Médecin"
+])
+
+# — MODULE : Générateur de fiche IA —
+if menu == "🧾 Générer une fiche IA":
+    st.subheader("💡 Génère une fiche médicale intelligente à partir d'une pathologie")
     patho = st.text_input("Entrez le nom de la pathologie :")
+    
+    if st.button("📄 Générer la fiche") and patho:
+        with st.spinner("Génération en cours..."):
+            try:
+                prompt = f"""
+Tu es une IA médicale experte. Génère une fiche pédagogique sur la pathologie suivante : {patho}.
+Structure-la ainsi :
+🧬 Définition
+🧠 Étiologies (logiques et mémorisables)
+🩺 Clinique typique
+🧪 Biologie
+🖼️ Imagerie (signes ou scores utiles)
+📚 Facultatif : un mini cas clinique d'application
+Fais clair, fluide, synthétique mais impactant.
+"""
+                response = openai.ChatCompletion.create(
+                    model="gpt-4",
+                    messages=[
+                        {"role": "system", "content": "Tu es un assistant médical expert."},
+                        {"role": "user", "content": prompt}
+                    ],
+                    temperature=0.7
+                )
+                fiche = response.choices[0].message.content
+                st.success("✅ Fiche générée !")
+                st.markdown(fiche)
+            except Exception as e:
+                st.error(f"❌ Une erreur est survenue : {e}")
 
-    if patho:
-        try:
-            fiche = generate_medical_sheet(patho)
-            st.markdown(fiche)
-        except Exception as e:
-            st.error(f"❌ Une erreur est survenue : {e}")
+# — PLACEHOLDERS pour les autres modules —
+elif menu == "📚 Module Cours":
+    st.subheader("📘 Module Cours")
+    st.info("💡 Ce module contiendra les cours organisés par spécialité.")
+
+elif menu == "🧠 QCM intelligents":
+    st.subheader("🧠 QCM personnalisés")
+    st.info("🛠️ Fonctionnalité en cours de développement.")
+
+elif menu == "💡 Méthodo personnalisée":
+    st.subheader("💡 Méthodologie intelligente")
+    st.info("🧠 DiagnosIA adaptera les conseils selon ton profil cognitif.")
+
+elif menu == "❌ Analyse erreurs":
+    st.subheader("❌ Analyse de tes erreurs")
+    st.info("🔍 DiagnosIA identifiera tes erreurs récurrentes pour t'aider à progresser.")
+
+elif menu == "🖨️ Générer fiche PDF":
+    st.subheader("🖨️ Générer des fiches PDF")
+    st.info("📄 Tu pourras bientôt imprimer tes synthèses en un clic.")
+
+elif menu == "🎯 Mode ECN / Concours":
+    st.subheader("🎯 Mode simulation ECN")
+    st.info("⏱️ Simulations d’épreuves avec chrono, auto-correction et feedback IA.")
+
+elif menu == "👨‍⚕️ Mode Jeune Médecin":
+    st.subheader("👨‍⚕️ Mode praticien")
+    st.info("🧰 Outils pratiques post-diplôme : checklists, simulateurs, aides terrain.")
