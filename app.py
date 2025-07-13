@@ -2,7 +2,7 @@ import streamlit as st
 import openai
 
 # ⛑️ Clé API OpenAI (attention à ne jamais l’exposer en public !)
-openai.api_key = "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"
+openai.api_key = "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"
 
 # 🧠 Fonction de génération de fiche médicale
 def generate_medical_sheet(pathologie):
