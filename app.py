@@ -2,8 +2,8 @@ import streamlit as st
 import openai
 import os
 
-openai.api_key = os.getenv("OPENAI_API_KEY")
-
+# Récupération sécurisée de la clé API via les secrets Streamlit
+openai.api_key = st.secrets["OPENAI_API_KEY"]
 
 # 🧠 Fonction de génération de fiche médicale
 def generate_medical_sheet(pathologie):
