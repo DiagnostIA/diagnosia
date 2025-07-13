@@ -1,4 +1,4 @@
-ƒimport streamlit as st
+import streamlit as st
 import openai
 import os
 
