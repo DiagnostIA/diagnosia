@@ -1,4 +1,4 @@
-import streamlit as st
+ƒimport streamlit as st
 import openai
 import os
 
@@ -22,12 +22,12 @@ def generate_medical_sheet(pathologie):
     """
 
     try:
-        response = openai.Completion.create(
-            engine="text-davinci-003",
-            prompt=prompt,
-            max_tokens=1000,
-            temperature=0.7
-        )
+       response = openai.Completion.create(
+    engine="text-davinci-003",
+    prompt=prompt,
+    max_tokens=1000,
+    temperature=0.7
+)
         return response.choices[0].text.strip()
     except Exception as e:
         return f"❌ Une erreur est survenue : {str(e)}"
