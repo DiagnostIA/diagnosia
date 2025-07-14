@@ -8,7 +8,7 @@ from modules.qcm_generator import run_qcm_generator  # Module QCM
 client = openai.OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
 
 # === STYLE CSS PERSONNALISÉ ===
-with open("/mnt/data/diagnosia_custom.css") as f:
+with open("diagnosia_custom.css") as f:
     st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
 
 # === LOGO (optionnel, tu peux le supprimer si pas encore dispo) ===
