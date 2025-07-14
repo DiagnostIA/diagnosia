@@ -1,6 +1,7 @@
 import streamlit as st
 import openai
 import os
+from modules.qcm_generator import run_qcm_generator  # ⬅️ 1. Import du module
 
 # Clé API OpenAI sécurisée via secrets Streamlit
 client = openai.OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
@@ -37,11 +38,14 @@ st.set_page_config(page_title="DiagnosIA", layout="centered")
 st.title("🧠 DiagnosIA – Assistant IA pour étudiants en médecine")
 st.caption("Une app intelligente pour apprendre, réviser et simuler des cas cliniques.")
 
-# Sélection du module
-module = st.sidebar.selectbox("🔍 Choisis un module", ["🧠 Générer une fiche médicale!"])
+# 🔽 Sélection du module (ajout du QCM ici)
+module = st.sidebar.selectbox(
+    "🔍 Choisis un module",
+    ["🧠 Générer une fiche médicale", "📝 Générer des QCM personnalisés"]
+)
 
-# Si module = fiche médicale
-if module == "🧠 Générer une fiche médicale!":
+# ✅ Bloc 1 – Fiche médicale
+if module == "🧠 Générer une fiche médicale":
     patho_input = st.text_input("Entrez le nom de la pathologie :", "")
     if st.button("📄 Générer la fiche"):
         if patho_input.strip() == "":
@@ -50,3 +54,7 @@ if module == "🧠 Générer une fiche médicale!":
             st.markdown(f"## 📋 Résultat pour **{patho_input.strip()}** :")
             result = generate_medical_sheet(patho_input.strip())
             st.write(result)
+
+# ✅ Bloc 2 – QCM personnalisés
+elif module == "📝 Générer des QCM personnalisés":
+    run_qcm_generator()
