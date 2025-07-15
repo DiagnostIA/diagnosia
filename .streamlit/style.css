@@ -1,53 +1,60 @@
-
-/* Base layout */
+/* --- BASE GÉNÉRALE --- */
 body {
     background-color: #0f172a;
-    font-family: 'Segoe UI', sans-serif;
     color: #f8fafc;
+    font-family: 'Segoe UI', 'Helvetica Neue', sans-serif;
+    line-height: 1.6;
 }
 
-/* Header */
+/* --- TITRES --- */
 h1 {
     font-size: 2.5rem;
-    color: #facc15;
+    color: #facc15; /* jaune doré */
     text-align: center;
     margin-bottom: 1.5rem;
 }
 
-/* Subtext */
-.stCaption {
+h2, h3 {
+    color: #38bdf8; /* bleu clair cyan */
+    margin-top: 2rem;
+}
+
+/* --- SOUS-TEXTES & CAPTIONS --- */
+.stCaption, .subtext {
     color: #94a3b8;
     text-align: center;
     font-style: italic;
     margin-bottom: 2rem;
 }
 
-/* Sidebar */
-.stSidebar {
+/* --- BARRE LATÉRALE --- */
+[data-testid="stSidebar"] {
     background-color: #1e293b;
     color: #e2e8f0;
     border-right: 1px solid #334155;
 }
 
-/* Dropdown */
-.stSelectbox label {
+/* --- INPUTS --- */
+input, textarea, select {
+    background-color: #1e293b !important;
+    color: #f8fafc !important;
+    border: 1px solid #475569 !important;
+    border-radius: 8px !important;
+    padding: 0.6rem !important;
+}
+
+/* --- DROPDOWNS LABELS --- */
+label {
     font-weight: bold;
     color: #f1f5f9;
 }
-.css-1wa3eu0-placeholder {
-    color: #94a3b8;
+
+/* --- PLACEHOLDER --- */
+::placeholder {
+    color: #94a3b8 !important;
 }
 
-/* Input field */
-.stTextInput input {
-    background-color: #1e293b;
-    color: #f8fafc;
-    border: 1px solid #475569;
-    border-radius: 8px;
-    padding: 0.6rem;
-}
-
-/* Button */
+/* --- BOUTONS --- */
 .stButton > button {
     background: linear-gradient(90deg, #2563eb, #1d4ed8);
     color: white;
@@ -55,41 +62,75 @@ h1 {
     border-radius: 10px;
     padding: 0.7rem 1.2rem;
     border: none;
-    transition: 0.3s;
+    transition: 0.3s ease-in-out;
+    box-shadow: 0 4px 14px rgba(37, 99, 235, 0.4);
 }
 .stButton > button:hover {
     background: linear-gradient(90deg, #1e40af, #1d4ed8);
+    transform: translateY(-1px);
 }
 
-/* Markdown Result Box */
-.stMarkdown {
+/* --- BOÎTE DE RÉSULTAT / FICHE --- */
+.result-box, .stMarkdown {
     background-color: #1e293b;
-    padding: 1.5rem;
+    padding: 1.5rem 2rem;
     border-radius: 12px;
     border: 1px solid #334155;
-    margin-top: 1rem;
+    margin-top: 1.5rem;
     font-size: 1.05rem;
+    color: #f8fafc;
 }
 
-/* Warnings and errors */
-.stAlert {
-    border-left: 5px solid #f87171;
+/* --- ALERTES (ERREURS / SUCCÈS) --- */
+.alert-error {
+    border-left: 6px solid #ef4444;
     background-color: #1f2937;
     color: #fecaca;
     padding: 1rem;
     border-radius: 10px;
+    margin-top: 1rem;
 }
 
-/* Success and info */
-.stSuccess {
-    border-left: 5px solid #34d399;
+.alert-success {
+    border-left: 6px solid #22c55e;
     background-color: #1f2937;
-    color: #a7f3d0;
+    color: #bbf7d0;
     padding: 1rem;
     border-radius: 10px;
+    margin-top: 1rem;
 }
 
-/* Title in results */
-h2, h3 {
-    color: #38bdf8;
+/* --- TABLES --- */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1rem;
+}
+th, td {
+    padding: 0.75rem;
+    text-align: left;
+    border-bottom: 1px solid #334155;
+}
+th {
+    color: #facc15;
+}
+tr:hover {
+    background-color: #0f172a;
+}
+
+/* --- LISTES --- */
+ul {
+    margin-left: 1.5rem;
+}
+ul li::marker {
+    color: #facc15;
+}
+
+/* --- LIENS --- */
+a {
+    color: #60a5fa;
+    text-decoration: none;
+}
+a:hover {
+    text-decoration: underline;
 }
