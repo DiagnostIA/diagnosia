@@ -24,7 +24,7 @@ def run_qcm_generator():
             # Prompt selon le mode choisi
             if mode_affichage == "➡️ Corrigé directement après chaque QCM":
                 prompt = f"""
-Tu es un expert en pédagogie médicale. À partir du texte suivant, génère {nb_qcm} QCM de type ECN avec une seule bonne réponse par question.
+Tu es un expert en pédagogie médicale. À partir de ce qui est demaandé , génère {nb_qcm} QCM de type ECN avec une seule bonne réponse par question.
 
 Après chaque question, donne :
 - La bonne réponse (ex. **Réponse : B**)

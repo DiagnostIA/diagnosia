@@ -1,0 +1,46 @@
+{
+  "start": {
+    "question": "👨‍⚕️ Patient de 54 ans, douleur thoracique aiguë. Que faites-vous ?",
+    "choices": {
+      "Faire un ECG": "ecg_done",
+      "Faire un examen clinique": "examen_clinique",
+      "Appeler la réa directement": "appel_rea"
+    }
+  },
+  "ecg_done": {
+    "question": "📉 ECG : sus-décalage ST antérieur. Prochaine étape ?",
+    "choices": {
+      "Appeler la réa": "appel_rea",
+      "Donner AAS + héparine": "traitement_1"
+    }
+  },
+  "appel_rea": {
+    "question": "🚨 Réa en route. Que faire en attendant ?",
+    "choices": {
+      "Oxygène + scope": "fin_scenario",
+      "Rien, j’attends": "erreur_grave"
+    }
+  },
+  "traitement_1": {
+    "question": "💊 Traitement donné. Et ensuite ?",
+    "choices": {
+      "Attente simple": "erreur_grave",
+      "Transfert en USIC": "fin_scenario"
+    }
+  },
+  "examen_clinique": {
+    "question": "🩺 Crépitants + TA 85/60. Suspicion de choc. Que faites-vous ?",
+    "choices": {
+      "Faire un ECG": "ecg_done",
+      "Remplissage + Oxygène": "appel_rea"
+    }
+  },
+  "fin_scenario": {
+    "question": "✅ Fin du scénario. Bonne prise en charge.",
+    "choices": {}
+  },
+  "erreur_grave": {
+    "question": "❌ Erreur grave. Le patient s'est dégradé rapidement.",
+    "choices": {}
+  }
+}
